@@ -52,8 +52,20 @@ RUN pip install --upgrade pip && apt-get remove -y python-enum34 python-pyasn1-m
 
 #navigate to the home directory
 WORKDIR home
+RUN pip install gdown
+RUN gdown https://drive.google.com/uc?id=152KL7JzDReYdg6quBznL9WtC0I5IvNx6
+RUN apt-get install unzip && unzip rl_library.zip 
+WORKDIR rl_library
+RUN pip install -e .
+WORKDIR ..
+
+
 RUN git clone https://github.com/pmusau17/Platooning-F1Tenth
 WORKDIR Platooning-F1Tenth 
+
+# try eigen three installation
+RUN git pull && apt-get update && apt-get install -y ros-kinetic-pcl-conversions ros-kinetic-pcl-msgs ros-kinetic-pcl-ros libeigen3-dev libproj-dev libmove-base-msgs-dev
+RUN ln -s /usr/include/eigen3/Eigen /usr/local/include/Eigen
 RUN /bin/bash -c 'source /opt/ros/kinetic/setup.bash && catkin_make'
 
 # get the model files so that there's no lag in starting gazebo
@@ -68,5 +80,6 @@ RUN apt-get install -y ros-kinetic-gazebo-ros-pkgs
 # Pytorch python 2.7
 RUN pip install torch torchvision
 RUN pip install future
+RUN pip install keras==2.3.1
 
 CMD /bin/bash -c "source devel/setup.bash && roslaunch race f1_tenth_devel.launch"

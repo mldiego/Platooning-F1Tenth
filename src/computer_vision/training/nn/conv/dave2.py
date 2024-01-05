@@ -24,32 +24,34 @@ class DAVE2:
 
         #first set of CONV=>RELU=> POOL layers
         model.add (Conv2D(24,(5,5),strides=(2,2), padding="valid",input_shape=inputShape))
-        model.add(Activation('relu'))
+        model.add(Activation('elu'))
 
         #second set of 5x5 CONV=>RELU=> POOL layers
         model.add (Conv2D(36,(5,5), strides=(2,2),padding="valid"))
-        model.add(Activation('relu'))
+        model.add(Activation('elu'))
 
         #third set of 5x5 CONV=>RELU=> POOL layers
         model.add (Conv2D(48,(5,5), strides=(2,2),padding="valid"))
-        model.add(Activation('relu'))
+        model.add(Activation('elu'))
 
         #first set of 3x3 CONV=>RELU=> POOL layers
         model.add (Conv2D(64,(3,3), padding="valid"))
-        model.add(Activation('relu'))
+        model.add(Activation('elu'))
 
         #second set of 3x3 CONV=>RELU=> POOL layers
         model.add (Conv2D(64,(3,3), padding="valid"))
-        model.add(Activation('relu'))
+        model.add(Activation('elu'))
 
         #set of fully connected layers
         model.add(Flatten())
         model.add(Dense(1164))
-        model.add(Activation('relu'))
+        model.add(Activation('elu'))
         model.add(Dense(100))
-        model.add(Activation('relu'))
+        model.add(Activation('elu'))
+        model.add(Dense(50))
+        model.add(Activation('elu'))
         model.add(Dense(10))
-        model.add(Activation('relu'))
+        model.add(Activation('elu'))
 
         #output
         model.add(Dense(classes))
@@ -59,6 +61,7 @@ class DAVE2:
 
 if __name__=="__main__":
     model=DAVE2.build(66,200,3,1)
+    print(model.summary())
     #This is responsible for constructing a graph based on the layers inside 
     #The input model and then writing the graph to disk an image
     plot_model(model, to_file="DAVE3.png",show_shapes=True)
